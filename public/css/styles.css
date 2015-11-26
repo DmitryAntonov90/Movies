@@ -1,3 +1,7 @@
+body{
+    background-color: #16ccff;
+}
+
 .panel {
     width: 80%;
     margin: 20px;
@@ -5,21 +9,45 @@
     border-radius: 0;
 }
 
-.panel-primary > .panel-heading{
+.panel-primary > .panel-heading {
     background-color: #6a289e;
     border-color: #3d1050;
     border-radius: 0;
     border-bottom: 0;
 }
 
-.panel{
+.panel {
     box-shadow: 0 0 30px black;
 }
 
-.form-control{
+.form-control {
     border-radius: 0;
 }
 
-.btn{
+.btn {
     border-radius: 0;
+}
+
+.navbar-default {
+    background-color: #381b3a;
+    border-color: #290c2c;
+    box-shadow: 0 0 30px black
+}
+
+.navbar-default .navbar-brand {
+    color: white;
+}
+
+.navbar-default .navbar-brand:hover,
+.navbar-default .navbar-brand:focus {
+    color: #6a289e;
+}
+
+.navbar-default .navbar-nav > li > a{
+    color: white;
+}
+
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > a:focus{
+    color: #6a289e;
 }
