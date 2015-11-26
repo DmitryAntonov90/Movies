@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html ng-app="movies" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Movies</title>
+    <link href="lib/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="css/styles.css" rel="stylesheet"/>
+    <script src="lib/angular/angular.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/controller/movieController.js"></script>
+    <script src="js/service/movieService.js"></script>
+</head>
+<body class="ng-clock">
+<div class="container" ng-controller="MovieController as ctrl">
+
+    <div class="panel panel-primary">
+
+        <div class="panel-heading"><span class="lead">{{!movie.id ? 'Добавить новый фильм' : 'Редактировать фильм ' + movie.title}}</span></div>
+
+
+        <form ng-submit="submit()" class="form-horizontal">
+
+            <div class="panel-body">
+
+                <input type="hidden" ng-model="ctrl.movie.id">
+
+                <div class="form-group">
+                    <label for="title" class="col-md-2 control-label">Название</label>
+
+                    <div class="col-md-6">
+                        <input type="text" ng-model="movie.title" class="form-control" id="title"
+                               placeholder="Введите название фильма">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="director" class="col-md-2 control-label">Режиссер</label>
+
+                    <div class="col-md-6">
+                        <input type="text" ng-model="movie.director" class="form-control" id="director"
+                               placeholder="Введите режисера фильма">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="releaseDate" class="col-md-2 control-label">Год выхода</label>
+
+                    <div class="col-md-6">
+                        <input type="text" ng-model="movie.year" class="form-control" id="releaseDate"
+                               placeholder="Введите год выхода фильма">
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="panel-footer">
+                <div class="form-actions" style="text-align: right">
+                    <input type="submit" value="{{!movie.id ? 'Добавить' : 'Обновить'}}"
+                           class="btn btn-primary btn-sm">
+                    <button type="button" ng-click="clear()" class="btn btn-warning btn-sm">Сбросить форму</button>
+                </div>
+            </div>
+
+        </form>
+
+    </div>
+
+    <div class="panel panel-primary" style="margin-top: 50px">
+        <div class="panel-heading"><span class="lead">Список всех фильмов</span></div>
+        <div class="panel-body">
+            <table class="table table-hover">
+                <tr>
+                    <th>Название</th>
+                    <th>Режиссер</th>
+                    <th>Год выхода</th>
+                    <th width="20%"></th>
+                </tr>
+                <tr ng-repeat="movie in movies">
+                    <td>{{movie.title}}</td>
+                    <td>{{movie.director}}</td>
+                    <td>{{movie.year}}</td>
+                    <td>
+                        <button type="button" ng-click="edit(movie.id)" class="btn btn-success btn-xs">Редактировать
+                        </button>
+                        <button type="button" ng-click="remove(movie.id)" class="btn btn-danger btn-xs">Удалить</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

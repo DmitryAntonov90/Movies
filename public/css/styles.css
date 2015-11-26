@@ -1,0 +1,25 @@
+.panel {
+    width: 80%;
+    margin: 20px;
+    border: none;
+    border-radius: 0;
+}
+
+.panel-primary > .panel-heading{
+    background-color: #6a289e;
+    border-color: #3d1050;
+    border-radius: 0;
+    border-bottom: 0;
+}
+
+.panel{
+    box-shadow: 0 0 30px black;
+}
+
+.form-control{
+    border-radius: 0;
+}
+
+.btn{
+    border-radius: 0;
+}
