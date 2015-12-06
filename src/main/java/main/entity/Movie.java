@@ -1,33 +1,37 @@
 package main.entity;
 
-import com.fasterxml.jackson.annotation.*;
-
 import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Set;
 
-
+@Entity
+@Table(name = "MOVIES")
+@NamedQuery(name = "Movie.getAll()",
+        query = "SELECT m FROM Movie m")
 public class Movie implements Serializable {
 
     private Long id;
     private String title;
-    private String director;
     private Long year;
+    private Director director;
+    private Set<Actor> actors;
+    private Set<Genre> genres;
 
-    @JsonCreator
     public Movie() {
-
     }
 
-    @JsonCreator
-    public Movie(@JsonProperty("id") Long id,
-                 @JsonProperty("title") String title,
-                 @JsonProperty("director") String director,
-                 @JsonProperty("year") Long year) {
+    public Movie(Long id, String title, Long year, Director director, Set<Actor> actors, Set<Genre> genres) {
         this.id = id;
         this.title = title;
-        this.director = director;
         this.year = year;
+        this.director = director;
+        this.actors = actors;
+        this.genres = genres;
     }
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "MOVIE_ID", unique = true, nullable = false)
     public Long getId() {
         return id;
     }
@@ -36,6 +40,7 @@ public class Movie implements Serializable {
         this.id = id;
     }
 
+    @Column(name = "TITLE", columnDefinition = "nvarchar2 (100)")
     public String getTitle() {
         return title;
     }
@@ -44,19 +49,67 @@ public class Movie implements Serializable {
         this.title = title;
     }
 
-    public String getDirector() {
-        return director;
-    }
-
-    public void setDirector(String director) {
-        this.director = director;
-    }
-
+    @Column(name = "MOVIE_YEAR")
     public Long getYear() {
         return year;
     }
 
     public void setYear(Long year) {
         this.year = year;
+    }
+
+    @ManyToOne
+    @JoinColumn(name = "DIRECTOR_ID")
+    public Director getDirector() {
+        return director;
+    }
+
+    public void setDirector(Director director) {
+        this.director = director;
+    }
+
+    @ManyToMany
+    @JoinTable(name = "MOVIE_ACTOR",
+    joinColumns = @JoinColumn(name = "MOVIE_ID", referencedColumnName = "MOVIE_ID"),
+    inverseJoinColumns = @JoinColumn(name = "ACTOR_ID", referencedColumnName = "ACTOR_ID"))
+    public Set<Actor> getActors() {
+        return actors;
+    }
+
+    public void setActors(Set<Actor> actors) {
+        this.actors = actors;
+    }
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "MOVIE_GENRE",
+    joinColumns = @JoinColumn(name = "MOVIE_ID", referencedColumnName = "MOVIE_ID"),
+    inverseJoinColumns = @JoinColumn(name = "GENRE_ID", referencedColumnName = "GENRE_ID"))
+    public Set<Genre> getGenres() {
+        return genres;
+    }
+
+    public void setGenres(Set<Genre> genres) {
+        this.genres = genres;
+    }
+
+    @Override
+    public int hashCode() {
+        final int prime = 17;
+        int value = new BigDecimal(getId()).intValueExact();
+        return prime * value;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        Movie other = (Movie) obj;
+        if (other == null)
+            return false;
+        if(this.hashCode() != other.hashCode())
+            return false;
+        if(this.getId() == other.getId()
+                && this.getTitle() == other.getTitle()
+                && this.getYear() == other.getYear())
+            return true;
+        return true;
     }
 }
