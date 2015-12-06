@@ -1,7 +1,9 @@
 package main.entity;
 
+import com.fasterxml.jackson.annotation.JsonView;
+import main.json.View;
 
-import java.math.BigDecimal;
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -11,20 +13,19 @@ public class Director {
 
     private Long id;
     private String name;
-    private Set<Movie> movies;
+    private Set<Movie> movies = new HashSet<Movie>();
 
     public Director() {
     }
 
-    public Director(Long id, String name) {
-        this.id = id;
+    public Director(String name) {
         this.name = name;
-        this.movies = new HashSet<Movie>();
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "DIRECTOR_ID")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name = "DIRECTOR_ID", columnDefinition = "NUMBER", unique = true, nullable = false)
+    @JsonView(View.Movie.class)
     public Long getId() {
         return id;
     }
@@ -33,7 +34,8 @@ public class Director {
         this.id = id;
     }
 
-    @Column(name = "DIRECTOR_NAME", columnDefinition = "nvarchar2 (30)")
+    @Column(name = "DIRECTOR_NAME", columnDefinition = "nvarchar2 (30)", unique = true, nullable = false)
+    @JsonView(View.Movie.class)
     public String getName() {
         return name;
     }
@@ -42,7 +44,7 @@ public class Director {
         this.name = name;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "director")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "director")
     public Set<Movie> getMovies() {
         return movies;
     }
@@ -54,21 +56,20 @@ public class Director {
     @Override
     public int hashCode() {
         final int prime = 11;
-        if (id == null)
-            return 11 * 11371;
-        int value = new BigDecimal(getId()).intValueExact();
-        return prime * value;
+        if (id == null && name == null)
+            return 154326765;
+        return prime + name.hashCode();
     }
 
     @Override
     public boolean equals(Object obj) {
+        if (obj == null) return false;
+        if (hashCode() != obj.hashCode()) return false;
         Director other = (Director) obj;
-        if (other == null)
+        if (id != other.id)
             return false;
-        if (hashCode() != other.hashCode())
+        if (name != other.name)
             return false;
-        if (this.id == other.id && this.name == other.name)
-            return true;
         return true;
     }
 }

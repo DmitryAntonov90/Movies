@@ -1,30 +1,34 @@
 package main.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
+import main.json.View;
 
+import javax.persistence.*;
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "GENRES")
-public class Genre {
+public class Genre implements Serializable {
 
     private Long id;
     private String title;
-    private Set<Movie> movies;
+    private Set<Movie> movies = new HashSet<Movie>();
 
-    public Genre(){
+    public Genre() {
     }
 
-    public Genre(Long id, String title){
-        this.id = id;
+    public Genre(String title) {
         this.title = title;
-        this.movies = new HashSet<Movie>();
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "GENRE_ID")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name = "GENRE_ID", unique = true, nullable = false)
+    @JsonView(View.Movie.class)
     public Long getId() {
         return id;
     }
@@ -33,7 +37,8 @@ public class Genre {
         this.id = id;
     }
 
-    @Column(name = "TITLE", columnDefinition = "nvarchar2 (50)")
+    @Column(name = "TITLE", columnDefinition = "nvarchar2 (50)", unique = true, nullable = false)
+    @JsonView(View.Movie.class)
     public String getTitle() {
         return title;
     }
@@ -54,19 +59,20 @@ public class Genre {
     @Override
     public int hashCode() {
         final int prime = 5;
-        int value = new BigDecimal(getId()).intValueExact();
-        return prime * value;
+        if(title == null && id == null)
+            return 11718561;
+        return prime + title.hashCode();
     }
 
     @Override
     public boolean equals(Object obj) {
-        Genre genre = (Genre)obj;
+        Genre genre = (Genre) obj;
 
-        if(genre == null)
+        if (genre == null)
             return false;
-        if(hashCode() != genre.hashCode())
+        if (hashCode() != genre.hashCode())
             return false;
-        if(getId() == genre.getId() && getTitle() == genre.getTitle())
+        if (getId() == genre.getId() && getTitle() == genre.getTitle())
             return true;
         return true;
     }

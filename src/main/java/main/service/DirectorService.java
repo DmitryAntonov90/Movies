@@ -1,7 +1,12 @@
 package main.service;
 
-/**
- * Created by dmitr on 02.12.2015.
- */
+
+import main.entity.Director;
+
 public interface DirectorService {
+    Director findByName(String name);
+    Director findById(Long id);
+    Director addDirector(Director director);
+    boolean isDirectorExist(String name);
+    boolean isDirectorExist(Long id);
 }

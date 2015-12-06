@@ -1,7 +1,15 @@
 package main.service;
 
-/**
- * Created by dmitr on 02.12.2015.
- */
+
+import main.entity.Actor;
+
+import java.util.List;
+
 public interface ActorService {
+    List<Actor> findAll();
+    Actor findByName(String name);
+    Actor findById(Long id);
+    Actor addActor(Actor actor);
+    boolean isActorExist(String name);
+    boolean isActorExist(Long id);
 }

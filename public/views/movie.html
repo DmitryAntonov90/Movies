@@ -8,7 +8,8 @@
 
         <div class="panel-body">
 
-            <input type="hidden" ng-model="ctrl.movie.id">
+            <input type="hidden" ng-model="movie.id">
+            <input type="hidden" ng-model="movie.director.id">
 
             <div class="form-group">
                 <label for="title" class="col-md-2 control-label">Название</label>
@@ -23,7 +24,7 @@
                 <label for="director" class="col-md-2 control-label">Режиссер</label>
 
                 <div class="col-md-6">
-                    <input type="text" ng-model="movie.director" class="form-control" id="director"
+                    <input type="text" ng-model="movie.director.name" class="form-control" id="director"
                            placeholder="Введите режисера фильма">
                 </div>
             </div>
@@ -34,6 +35,61 @@
                 <div class="col-md-6">
                     <input type="text" ng-model="movie.year" class="form-control" id="releaseDate"
                            placeholder="Введите год выхода фильма">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-2 control-label">Актеры</label>
+
+                <div class="col-md-6" ng-show="!hasActors()">
+                    <div style="margin-top: .5em;">Список пуст добавьте актера</div>
+                </div>
+
+                <div class="col-md-8 form-inline" ng-show="hasActors()">
+
+                    <div class="input-group" ng-repeat="actor in movie.actors">
+                        <span class="input-group-addon">{{actor.name}}</span>
+                        <button type="button" class="btn block-button" ng-click="deleteActor(actor.name)">
+                            <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-6">
+                    <input type="text" ng-model="name" class="form-control" placeholder="Добавьте нового актера">
+                </div>
+                <div class="col-md-2">
+                    <button type="button" class="btn btn-success" ng-click="addActor(name)">Добавить</button>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-md-2 control-label">Жанр</label>
+
+                <div class="col-md-6" ng-show="!hasGenres()">
+                    <div style="margin-top: .5em;">Список пуст добавьте жанр</div>
+                </div>
+
+                <div class="col-md-8 form-inline" ng-show="hasGenres()">
+
+                    <div class="input-group" ng-repeat="genre in movie.genres">
+                        <span class="input-group-addon">{{genre.title}}</span>
+                        <button type="button" class="btn block-button" ng-click="deleteGenre(genre.title)">
+                            <span class="glyphicon glyphicon-remove"></span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-6">
+                    <input type="text" ng-model="genre" class="form-control" placeholder="Добавьте новый жанр">
+                </div>
+                <div class="col-md-2">
+                    <button type="button" ng-click="addGenre(genre)" class="btn btn-success" >Добавить</button>
                 </div>
             </div>
 
@@ -59,12 +115,17 @@
                 <th>Название</th>
                 <th>Режиссер</th>
                 <th>Год выхода</th>
+                <th width="30%">В ролях</th>
+                <th width="20%">Жанр</th>
                 <th width="20%"></th>
             </tr>
             <tr ng-repeat="movie in movies">
                 <td>{{movie.title}}</td>
-                <td>{{movie.director}}</td>
+                <td>{{movie.director.name}}</td>
                 <td>{{movie.year}}</td>
+                <td>{{getActors(movie.actors)}}</td>
+                <td>{{getGenres(movie.genres)}}</td>
+
                 <td>
                     <button type="button" ng-click="edit(movie.id)" class="btn btn-success btn-xs">Редактировать
                     </button>
@@ -74,3 +135,6 @@
         </table>
     </div>
 </div>
+
+
+

@@ -1,7 +1,13 @@
 package main.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
+import main.json.View;
 
+import javax.persistence.*;
+import javax.validation.constraints.Null;
 import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -10,19 +16,19 @@ public class Actor {
 
     private Long id;
     private String name;
-    private Set<Movie> movies;
+    private Set<Movie> movies = new HashSet<Movie>();
 
     public Actor() {
     }
 
-    public Actor(Long id, String name) {
-        this.id = id;
+    public Actor(String name) {
         this.name = name;
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ACTOR_ID")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name = "ACTOR_ID", unique = true, nullable = false)
+    @JsonView(View.Movie.class)
     public Long getId() {
         return id;
     }
@@ -32,7 +38,8 @@ public class Actor {
     }
 
 
-    @Column(name = "ACTOR_NAME", columnDefinition = "nvarchar2 (100)")
+    @Column(name = "ACTOR_NAME", columnDefinition = "nvarchar2 (100)", nullable = false, unique = true)
+    @JsonView(View.Movie.class)
     public String getName() {
         return name;
     }
@@ -53,18 +60,19 @@ public class Actor {
     @Override
     public int hashCode() {
         final int prime = 12;
-        int value = new BigDecimal(getId()).intValueExact();
-        return prime * value;
+        if(id == null && name == null)
+            return 64378212;
+        return prime + name.hashCode();
     }
 
     @Override
     public boolean equals(Object obj) {
-        Actor other = (Actor)obj;
-        if(other == null)
+        Actor other = (Actor) obj;
+        if (other == null)
             return false;
-        if(hashCode() != other.hashCode())
+        if (hashCode() != other.hashCode())
             return false;
-        if(getId() == other.getId() && getName() == other.getName())
+        if (getId() == other.getId() && getName() == other.getName())
             return true;
         return true;
     }

@@ -1,5 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<persistence xmlns="http://java.sun.com/xml/ns/persistence" version="2.0">
+<persistence xmlns="http://java.sun.com/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://java.sun.com/xml/ns/persistence
+                                 http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+             version="2.0">
 
-    <persistence-unit name="persistenceUnit"/>
+    <persistence-unit name="MOVIES" transaction-type="RESOURCE_LOCAL">
+        <provider>org.hibernate.ejb.HibernatePersistence</provider>
+
+        <properties>
+            <property name="hibernate.connection.driver_class" value="oracle.jdbc.driver.OracleDriver"/>
+            <property name="hibernate.connection.url" value="jdbc:oracle:thin:@localhost:1521/MOVIES"/>
+            <property name="hibernate.connection.username" value="MOVIES"/>
+            <property name="hibernate.connection.password" value="connectpass"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.Oracle12cDialect"/>
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="show_sql" value="true"/>
+            <property name="hibernate.format_sql" value="true"/>
+        </properties>
+    </persistence-unit>
 </persistence>
